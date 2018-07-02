@@ -1,0 +1,1 @@
+Simple PoC for implementing westgard rules using ja-rules library.
