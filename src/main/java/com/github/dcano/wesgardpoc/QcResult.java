@@ -1,4 +1,4 @@
-package org.github.dcano.wesgardpoc;
+package com.github.dcano.wesgardpoc;
 
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -19,7 +19,7 @@ class QcResult {
         return id;
     }
 
-    double getResult() {
+    public double getResult() {
         return result;
     }
 

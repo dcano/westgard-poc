@@ -1,21 +1,21 @@
-package org.github.dcano.wesgardpoc;
+package com.github.dcano.wesgardpoc;
 
 import java.util.List;
 
 public class RuleEvaluationRequest {
 
-    private final String id;
+    private final String requestId;
     private final WestgardRuleContext westgardRuleContext;
     private final List<WestgardRule> rules;
 
     RuleEvaluationRequest(String id, WestgardRuleContext westgardRuleContext, List<WestgardRule> rules) {
-        this.id = id;
+        this.requestId = id;
         this.westgardRuleContext = westgardRuleContext;
         this.rules = rules;
     }
 
-    public String getId() {
-        return id;
+    public String getRequestId() {
+        return requestId;
     }
 
     WestgardRuleContext getWestgardRuleContext() {

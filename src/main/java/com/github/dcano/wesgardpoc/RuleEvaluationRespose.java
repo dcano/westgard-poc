@@ -1,4 +1,4 @@
-package org.github.dcano.wesgardpoc;
+package com.github.dcano.wesgardpoc;
 
 import java.util.List;
 
@@ -36,6 +36,15 @@ class RuleEvaluationRespose {
         EvaluationResult getEvaluationResult() {
             return evaluationResult;
         }
+
+        static RuleEvalutionResult matchingResultFor(WestgardRule westgardRule) {
+            return new RuleEvalutionResult(westgardRule, EvaluationResult.MATCH);
+        }
+
+        static RuleEvalutionResult nonMatchingResultFor(WestgardRule westgardRule) {
+            return new RuleEvalutionResult(westgardRule, EvaluationResult.NOT_MATCH);
+        }
+
     }
 
 }

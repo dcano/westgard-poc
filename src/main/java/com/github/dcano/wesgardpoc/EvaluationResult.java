@@ -1,4 +1,4 @@
-package org.github.dcano.wesgardpoc;
+package com.github.dcano.wesgardpoc;
 
 public enum EvaluationResult {
 
