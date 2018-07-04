@@ -23,10 +23,12 @@ class RuleEvaluationRespose {
     static class RuleEvalutionResult {
         private final WestgardRule westgardRule;
         private final EvaluationResult evaluationResult;
+        private final String resultId;
 
-        RuleEvalutionResult(WestgardRule westgardRule, EvaluationResult evaluationResult) {
+        RuleEvalutionResult(WestgardRule westgardRule, EvaluationResult evaluationResult, String resultId) {
             this.westgardRule = westgardRule;
             this.evaluationResult = evaluationResult;
+            this.resultId = resultId;
         }
 
         WestgardRule getWestgardRule() {
@@ -37,12 +39,12 @@ class RuleEvaluationRespose {
             return evaluationResult;
         }
 
-        static RuleEvalutionResult matchingResultFor(WestgardRule westgardRule) {
-            return new RuleEvalutionResult(westgardRule, EvaluationResult.MATCH);
+        static RuleEvalutionResult matchingResultFor(WestgardRule westgardRule, String resultId) {
+            return new RuleEvalutionResult(westgardRule, EvaluationResult.MATCH, resultId);
         }
 
-        static RuleEvalutionResult nonMatchingResultFor(WestgardRule westgardRule) {
-            return new RuleEvalutionResult(westgardRule, EvaluationResult.NOT_MATCH);
+        static RuleEvalutionResult nonMatchingResultFor(WestgardRule westgardRule, String resultId) {
+            return new RuleEvalutionResult(westgardRule, EvaluationResult.NOT_MATCH, resultId);
         }
 
     }

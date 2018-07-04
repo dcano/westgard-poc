@@ -1,0 +1,71 @@
+package com.github.dcano.wesgardpoc;
+
+import com.github.rpaulkennedy.jarules.rule.And;
+import com.github.rpaulkennedy.jarules.rule.Expr;
+import com.github.rpaulkennedy.jarules.rule.Or;
+import com.github.rpaulkennedy.jarules.rule.Rule;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
+public class RuleEvaluationVisitor implements WestgardVisitor {
+
+    private final WestgardRuleContext context;
+    private final Consumer<RuleEvaluationRespose.RuleEvalutionResult> callback;
+
+    public RuleEvaluationVisitor(WestgardRuleContext context, Consumer<RuleEvaluationRespose.RuleEvalutionResult> callback) {
+        this.context = context;
+        this.callback = callback;
+    }
+
+    @Override
+    public void visit(RxKsRule rxKsRule) {
+        Rule rule;
+        List<Rule> aboveMeanRules = new ArrayList<>();
+        List<Rule> belowMeanRules = new ArrayList<>();
+        int resultUnderEvaluationIndex = context.getContextControls().size() - 1;
+
+        for(int i = resultUnderEvaluationIndex; i > resultUnderEvaluationIndex - rxKsRule.getR(); i--) {
+            aboveMeanRules.add(rxKsAboveRuleFor(rxKsRule.getK(), i));
+            belowMeanRules.add(rxKsBelowRuleFor(rxKsRule.getK(), i));
+        }
+
+
+        if(rxKsRule.getR() > 1) {
+            rule = And.of(aboveMeanRules).or(And.of(belowMeanRules));
+        }
+        else {
+            rule = Or.of(aboveMeanRules.get(0), belowMeanRules.get(0));
+        }
+
+        if(rule.matches(context)) {
+            callback.accept(RuleEvaluationRespose.RuleEvalutionResult.matchingResultFor(rxKsRule, context.getControlUnderEvaluation().getId()));
+        }
+        else {
+            callback.accept(RuleEvaluationRespose.RuleEvalutionResult.nonMatchingResultFor(rxKsRule, context.getControlUnderEvaluation().getId()));
+        }
+    }
+
+    @Override
+    public void visit(R4sRule r4sRule) {
+        Rule rule = Expr.of("(T(java.lang.Math).abs((contextControls[0].result - " + context.getMean() + ")) +  T(java.lang.Math).abs((contextControls[1].result - " + context.getMean() + "))) >= 4*" + context.getSd());
+        if(rule.matches(context)) {
+            callback.accept(RuleEvaluationRespose.RuleEvalutionResult.matchingResultFor(r4sRule, context.getControlUnderEvaluation().getId()));
+        }
+        else {
+            callback.accept(RuleEvaluationRespose.RuleEvalutionResult.nonMatchingResultFor(r4sRule, context.getControlUnderEvaluation().getId()));
+        }
+    }
+
+
+
+    private Rule rxKsAboveRuleFor(int k, int resultIndex) {
+        return Expr.of("(contextControls["+resultIndex+"].result > " +context.getMean()+ ") && (contextControls["+resultIndex+"].result - " + context.getMean() + ") >= (" + k + "*" + context.getSd() + ")");
+    }
+
+    private Rule rxKsBelowRuleFor(int k, int resultIndex) {
+        return Expr.of("(contextControls["+resultIndex+"].result < " +context.getMean()+ ") && (contextControls["+resultIndex+"].result - " + context.getMean() + ") <= (" + k + "*" + context.getSd() + " * (-1) )");
+    }
+
+}

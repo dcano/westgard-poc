@@ -1,12 +1,5 @@
 package com.github.dcano.wesgardpoc;
 
-import com.github.dcano.wesgardpoc.EvaluationResult;
-import com.github.dcano.wesgardpoc.QcResult;
-import com.github.dcano.wesgardpoc.RuleEvalutionVisitor;
-import com.github.dcano.wesgardpoc.RxKsRule;
-import com.github.dcano.wesgardpoc.WestgardRule;
-import com.github.dcano.wesgardpoc.WestgardRuleContext;
-import com.github.dcano.wesgardpoc.WestgardVisitor;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,16 +22,98 @@ public class EvaluationResultTest {
     }
 
     @Test
-    public void should_match_qc_results() {
+    public void should_match_qc_results_for_1x2s_above_mean() {
         String mainResultId = UUID.randomUUID().toString();
-        QcResult controlUnderEvaluation = new QcResult(mainResultId, 4.3, ZonedDateTime.now());
+        QcResult controlUnderEvaluation = new QcResult(mainResultId, 4.4, ZonedDateTime.now());
         List<QcResult> contextControls = new ArrayList<>();
         contextControls.add(controlUnderEvaluation);
         WestgardRuleContext westgardRuleContext = new WestgardRuleContext(tenantId, 4.1, 0.1, controlUnderEvaluation, contextControls);
         int R = 1;
-        int K = 1;
+        int K = 2;
 
-        WestgardVisitor evaluationVisitor = new RuleEvalutionVisitor(westgardRuleContext, ruleEvalutionResult -> assertThat(ruleEvalutionResult.getEvaluationResult()).as("Rule matches").isEqualTo(EvaluationResult.MATCH));
+        WestgardVisitor evaluationVisitor = new RuleEvaluationVisitor(westgardRuleContext, ruleEvalutionResult -> assertThat(ruleEvalutionResult.getEvaluationResult()).as("Rule matches").isEqualTo(EvaluationResult.MATCH));
+        WestgardRule rule = new RxKsRule(R, K);
+        rule.accept(evaluationVisitor);
+    }
+
+
+    @Test
+    public void should_match_qc_results_for_1x2s_below_mean() {
+        String mainResultId = UUID.randomUUID().toString();
+        QcResult controlUnderEvaluation = new QcResult(mainResultId, 3.7, ZonedDateTime.now());
+        List<QcResult> contextControls = new ArrayList<>();
+        contextControls.add(controlUnderEvaluation);
+
+        WestgardRuleContext westgardRuleContext = new WestgardRuleContext(tenantId, 4.1, 0.1, controlUnderEvaluation, contextControls);
+        int R = 1;
+        int K = 2;
+
+        WestgardVisitor evaluationVisitor = new RuleEvaluationVisitor(westgardRuleContext, ruleEvaluationResult -> assertThat(ruleEvaluationResult.getEvaluationResult()).as("Rule matches").isEqualTo(EvaluationResult.MATCH));
+        WestgardRule rule = new RxKsRule(R, K);
+        rule.accept(evaluationVisitor);
+    }
+
+    @Test
+    public void should_match_qc_results_for_1x3s_above_mean() {
+        String mainResultId = UUID.randomUUID().toString();
+        QcResult controlUnderEvaluation = new QcResult(mainResultId, 4.5, ZonedDateTime.now());
+        List<QcResult> contextControls = new ArrayList<>();
+        contextControls.add(controlUnderEvaluation);
+        WestgardRuleContext westgardRuleContext = new WestgardRuleContext(tenantId, 4.1, 0.1, controlUnderEvaluation, contextControls);
+        int R = 1;
+        int K = 3;
+
+        WestgardVisitor evaluationVisitor = new RuleEvaluationVisitor(westgardRuleContext, ruleEvaluationResult -> assertThat(ruleEvaluationResult.getEvaluationResult()).as("Rule matches").isEqualTo(EvaluationResult.MATCH));
+        WestgardRule rule = new RxKsRule(R, K);
+        rule.accept(evaluationVisitor);
+    }
+
+    @Test
+    public void should_match_qc_results_for_1x3s_below_mean() {
+        String mainResultId = UUID.randomUUID().toString();
+        QcResult controlUnderEvaluation = new QcResult(mainResultId, 3.6, ZonedDateTime.now());
+        List<QcResult> contextControls = new ArrayList<>();
+        contextControls.add(controlUnderEvaluation);
+        WestgardRuleContext westgardRuleContext = new WestgardRuleContext(tenantId, 4.1, 0.1, controlUnderEvaluation, contextControls);
+        int R = 1;
+        int K = 3;
+
+        WestgardVisitor evaluationVisitor = new RuleEvaluationVisitor(westgardRuleContext, ruleEvaluationResult -> assertThat(ruleEvaluationResult.getEvaluationResult()).as("Rule matches").isEqualTo(EvaluationResult.MATCH));
+        WestgardRule rule = new RxKsRule(R, K);
+        rule.accept(evaluationVisitor);
+    }
+
+
+    @Test
+    public void should_match_qc_results_for_2x2s_above_mean() {
+        String mainResultId = UUID.randomUUID().toString();
+        QcResult previousControl = new QcResult(mainResultId, 4.7, ZonedDateTime.now().minusDays(1));
+        QcResult controlUnderEvaluation = new QcResult(mainResultId, 4.5, ZonedDateTime.now());
+        List<QcResult> contextControls = new ArrayList<>();
+        contextControls.add(previousControl);
+        contextControls.add(controlUnderEvaluation);
+        WestgardRuleContext westgardRuleContext = new WestgardRuleContext(tenantId, 4.1, 0.1, controlUnderEvaluation, contextControls);
+        int R = 2;
+        int K = 2;
+
+        WestgardVisitor evaluationVisitor = new RuleEvaluationVisitor(westgardRuleContext, ruleEvaluationResult -> assertThat(ruleEvaluationResult.getEvaluationResult()).as("Rule matches").isEqualTo(EvaluationResult.MATCH));
+        WestgardRule rule = new RxKsRule(R, K);
+        rule.accept(evaluationVisitor);
+    }
+
+    @Test
+    public void should_match_qc_results_for_2x2s_below_mean() {
+        String mainResultId = UUID.randomUUID().toString();
+        QcResult previousControl = new QcResult(mainResultId, 3.6, ZonedDateTime.now().minusDays(1));
+        QcResult controlUnderEvaluation = new QcResult(mainResultId, 3.5, ZonedDateTime.now());
+        List<QcResult> contextControls = new ArrayList<>();
+        contextControls.add(previousControl);
+        contextControls.add(controlUnderEvaluation);
+        WestgardRuleContext westgardRuleContext = new WestgardRuleContext(tenantId, 4.1, 0.1, controlUnderEvaluation, contextControls);
+        int R = 2;
+        int K = 2;
+
+        WestgardVisitor evaluationVisitor = new RuleEvaluationVisitor(westgardRuleContext, ruleEvaluationResult -> assertThat(ruleEvaluationResult.getEvaluationResult()).as("Rule matches").isEqualTo(EvaluationResult.MATCH));
         WestgardRule rule = new RxKsRule(R, K);
         rule.accept(evaluationVisitor);
     }

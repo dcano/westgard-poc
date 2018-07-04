@@ -39,7 +39,6 @@ class QcResult {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(id, result, zonedDateTime);
     }
 }

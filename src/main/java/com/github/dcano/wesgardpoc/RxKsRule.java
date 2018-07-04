@@ -5,7 +5,7 @@ class RxKsRule extends WestgardRule {
     private final int r;
     private final int k;
 
-    public RxKsRule(int r, int k) {
+    RxKsRule(int r, int k) {
         this.r = r;
         this.k = k;
     }
@@ -15,11 +15,11 @@ class RxKsRule extends WestgardRule {
         visitor.visit(this);
     }
 
-    public int getR() {
+    int getR() {
         return r;
     }
 
-    public int getK() {
+    int getK() {
         return k;
     }
 }
