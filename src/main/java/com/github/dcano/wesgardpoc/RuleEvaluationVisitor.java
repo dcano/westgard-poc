@@ -58,7 +58,39 @@ public class RuleEvaluationVisitor implements WestgardVisitor {
         }
     }
 
+    @Override
+    public void visit(NxRule nxRule) {
+        if(context.getContextControls().size() < nxRule.getN()) throw new IllegalStateException("No enough results available"); //TODO consider using custom runtime exception
 
+        Rule rule;
+
+        List<Rule> aboveRules = new ArrayList<>();
+        List<Rule> belowRules = new ArrayList<>();
+
+        int resultUnderEvaluationIndex = context.getContextControls().size() - 1;
+        for(int i = resultUnderEvaluationIndex; i > resultUnderEvaluationIndex - nxRule.getN(); i--) {
+            aboveRules.add(nxAboveRuleFor(i));
+            belowRules.add(nxBelowRuleFor(i));
+        }
+
+        rule = And.of(aboveRules).or(And.of(belowRules));
+
+        if(rule.matches(context)) {
+            callback.accept(RuleEvaluationRespose.RuleEvalutionResult.matchingResultFor(nxRule, context.getControlUnderEvaluation().getId()));
+        }
+        else {
+            callback.accept(RuleEvaluationRespose.RuleEvalutionResult.nonMatchingResultFor(nxRule, context.getControlUnderEvaluation().getId()));
+        }
+
+    }
+
+    private Rule nxAboveRuleFor(int resultIndex) {
+        return Expr.of("contextControls["+resultIndex+"].result > " + context.getMean());
+    }
+
+    private Rule nxBelowRuleFor(int resultIndex) {
+        return Expr.of("contextControls["+resultIndex+"].result < " + context.getMean());
+    }
 
     private Rule rxKsAboveRuleFor(int k, int resultIndex) {
         return Expr.of("(contextControls["+resultIndex+"].result > " +context.getMean()+ ") && (contextControls["+resultIndex+"].result - " + context.getMean() + ") >= (" + k + "*" + context.getSd() + ")");
