@@ -1,4 +1,4 @@
-package com.github.dcano.wesgardpoc;
+package com.roche.modules.re;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
@@ -15,8 +15,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.github.dcano.wesgardpoc.ResultLocation.ABOVE_MEAN;
-import static com.github.dcano.wesgardpoc.ResultLocation.BELOW_MEAN;
+import static com.roche.modules.re.ResultLocation.ABOVE_MEAN;
+import static com.roche.modules.re.ResultLocation.BELOW_MEAN;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(Parameterized.class)
@@ -47,8 +47,8 @@ public class NxRuleTest {
     @Test
     public void should_evaluate_qc_results_against_NxS_rule() {
         WestgardRuleContext westgardRuleContext = new WestgardRuleContext(tenantId, MEAN, SD, resultsUnderEvaluation.get(resultsUnderEvaluation.size()-1), resultsUnderEvaluation);
-        WestgardVisitor evaluationVisitor = new RuleEvaluationVisitor(westgardRuleContext, ruleEvaluationResult -> assertThat(ruleEvaluationResult.getEvaluationResult()).as("Rule matches").isEqualTo(expected));
-        WestgardRule rule = new NxRule(N);
+        RuleVisitor evaluationVisitor = new RuleEvaluationVisitor(westgardRuleContext, ruleEvaluationResult -> assertThat(ruleEvaluationResult.getEvaluationResult()).as("Rule matches").isEqualTo(expected));
+        QcRule rule = new NxRule(N);
         rule.accept(evaluationVisitor);
     }
 

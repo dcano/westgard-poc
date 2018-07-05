@@ -1,4 +1,4 @@
-package com.github.dcano.wesgardpoc;
+package com.roche.modules.re;
 
 import java.util.List;
 
@@ -21,17 +21,21 @@ class RuleEvaluationRespose {
     }
 
     static class RuleEvalutionResult {
-        private final WestgardRule westgardRule;
+        private final QcRule westgardRule;
         private final EvaluationResult evaluationResult;
         private final String resultId;
 
-        RuleEvalutionResult(WestgardRule westgardRule, EvaluationResult evaluationResult, String resultId) {
+        RuleEvalutionResult(QcRule westgardRule, EvaluationResult evaluationResult, String resultId) {
             this.westgardRule = westgardRule;
             this.evaluationResult = evaluationResult;
             this.resultId = resultId;
         }
 
-        WestgardRule getWestgardRule() {
+        String getResultId() {
+            return this.resultId;
+        }
+
+        QcRule getWestgardRule() {
             return westgardRule;
         }
 
@@ -39,11 +43,11 @@ class RuleEvaluationRespose {
             return evaluationResult;
         }
 
-        static RuleEvalutionResult matchingResultFor(WestgardRule westgardRule, String resultId) {
+        static RuleEvalutionResult matchingResultFor(QcRule westgardRule, String resultId) {
             return new RuleEvalutionResult(westgardRule, EvaluationResult.MATCH, resultId);
         }
 
-        static RuleEvalutionResult nonMatchingResultFor(WestgardRule westgardRule, String resultId) {
+        static RuleEvalutionResult nonMatchingResultFor(QcRule westgardRule, String resultId) {
             return new RuleEvalutionResult(westgardRule, EvaluationResult.NOT_MATCH, resultId);
         }
 

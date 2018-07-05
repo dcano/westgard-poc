@@ -1,4 +1,4 @@
-package com.github.dcano.wesgardpoc;
+package com.roche.modules.re;
 
 import java.util.List;
 
@@ -6,12 +6,12 @@ public class RuleEvaluationRequest {
 
     private final String requestId;
     private final WestgardRuleContext westgardRuleContext;
-    private final List<WestgardRule> rules;
+    private final List<QcRule> rulesToExecute;
 
-    RuleEvaluationRequest(String id, WestgardRuleContext westgardRuleContext, List<WestgardRule> rules) {
+    RuleEvaluationRequest(String id, WestgardRuleContext westgardRuleContext, List<QcRule> rulesToExecute) {
         this.requestId = id;
         this.westgardRuleContext = westgardRuleContext;
-        this.rules = rules;
+        this.rulesToExecute = rulesToExecute;
     }
 
     public String getRequestId() {
@@ -22,7 +22,8 @@ public class RuleEvaluationRequest {
         return westgardRuleContext;
     }
 
-    List<WestgardRule> getRules() {
-        return rules;
+    List<QcRule> getRulesToExecute() {
+        return rulesToExecute;
     }
+
 }

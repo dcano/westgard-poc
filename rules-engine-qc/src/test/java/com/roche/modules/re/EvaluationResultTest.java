@@ -1,4 +1,4 @@
-package com.github.dcano.wesgardpoc;
+package com.roche.modules.re;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,8 +31,8 @@ public class EvaluationResultTest {
         int R = 1;
         int K = 2;
 
-        WestgardVisitor evaluationVisitor = new RuleEvaluationVisitor(westgardRuleContext, ruleEvalutionResult -> assertThat(ruleEvalutionResult.getEvaluationResult()).as("Rule matches").isEqualTo(EvaluationResult.MATCH));
-        WestgardRule rule = new RxKsRule(R, K);
+        RuleVisitor evaluationVisitor = new RuleEvaluationVisitor(westgardRuleContext, ruleEvalutionResult -> assertThat(ruleEvalutionResult.getEvaluationResult()).as("Rule matches").isEqualTo(EvaluationResult.MATCH));
+        QcRule rule = new RxKsRule(R, K);
         rule.accept(evaluationVisitor);
     }
 
@@ -48,8 +48,8 @@ public class EvaluationResultTest {
         int R = 1;
         int K = 2;
 
-        WestgardVisitor evaluationVisitor = new RuleEvaluationVisitor(westgardRuleContext, ruleEvaluationResult -> assertThat(ruleEvaluationResult.getEvaluationResult()).as("Rule matches").isEqualTo(EvaluationResult.MATCH));
-        WestgardRule rule = new RxKsRule(R, K);
+        RuleVisitor evaluationVisitor = new RuleEvaluationVisitor(westgardRuleContext, ruleEvaluationResult -> assertThat(ruleEvaluationResult.getEvaluationResult()).as("Rule matches").isEqualTo(EvaluationResult.MATCH));
+        QcRule rule = new RxKsRule(R, K);
         rule.accept(evaluationVisitor);
     }
 
@@ -63,8 +63,8 @@ public class EvaluationResultTest {
         int R = 1;
         int K = 3;
 
-        WestgardVisitor evaluationVisitor = new RuleEvaluationVisitor(westgardRuleContext, ruleEvaluationResult -> assertThat(ruleEvaluationResult.getEvaluationResult()).as("Rule matches").isEqualTo(EvaluationResult.MATCH));
-        WestgardRule rule = new RxKsRule(R, K);
+        RuleVisitor evaluationVisitor = new RuleEvaluationVisitor(westgardRuleContext, ruleEvaluationResult -> assertThat(ruleEvaluationResult.getEvaluationResult()).as("Rule matches").isEqualTo(EvaluationResult.MATCH));
+        QcRule rule = new RxKsRule(R, K);
         rule.accept(evaluationVisitor);
     }
 
@@ -78,8 +78,8 @@ public class EvaluationResultTest {
         int R = 1;
         int K = 3;
 
-        WestgardVisitor evaluationVisitor = new RuleEvaluationVisitor(westgardRuleContext, ruleEvaluationResult -> assertThat(ruleEvaluationResult.getEvaluationResult()).as("Rule matches").isEqualTo(EvaluationResult.MATCH));
-        WestgardRule rule = new RxKsRule(R, K);
+        RuleVisitor evaluationVisitor = new RuleEvaluationVisitor(westgardRuleContext, ruleEvaluationResult -> assertThat(ruleEvaluationResult.getEvaluationResult()).as("Rule matches").isEqualTo(EvaluationResult.MATCH));
+        QcRule rule = new RxKsRule(R, K);
         rule.accept(evaluationVisitor);
     }
 
@@ -96,8 +96,8 @@ public class EvaluationResultTest {
         int R = 2;
         int K = 2;
 
-        WestgardVisitor evaluationVisitor = new RuleEvaluationVisitor(westgardRuleContext, ruleEvaluationResult -> assertThat(ruleEvaluationResult.getEvaluationResult()).as("Rule matches").isEqualTo(EvaluationResult.MATCH));
-        WestgardRule rule = new RxKsRule(R, K);
+        RuleVisitor evaluationVisitor = new RuleEvaluationVisitor(westgardRuleContext, ruleEvaluationResult -> assertThat(ruleEvaluationResult.getEvaluationResult()).as("Rule matches").isEqualTo(EvaluationResult.MATCH));
+        QcRule rule = new RxKsRule(R, K);
         rule.accept(evaluationVisitor);
     }
 
@@ -113,8 +113,8 @@ public class EvaluationResultTest {
         int R = 2;
         int K = 2;
 
-        WestgardVisitor evaluationVisitor = new RuleEvaluationVisitor(westgardRuleContext, ruleEvaluationResult -> assertThat(ruleEvaluationResult.getEvaluationResult()).as("Rule matches").isEqualTo(EvaluationResult.MATCH));
-        WestgardRule rule = new RxKsRule(R, K);
+        RuleVisitor evaluationVisitor = new RuleEvaluationVisitor(westgardRuleContext, ruleEvaluationResult -> assertThat(ruleEvaluationResult.getEvaluationResult()).as("Rule matches").isEqualTo(EvaluationResult.MATCH));
+        QcRule rule = new RxKsRule(R, K);
         rule.accept(evaluationVisitor);
     }
 

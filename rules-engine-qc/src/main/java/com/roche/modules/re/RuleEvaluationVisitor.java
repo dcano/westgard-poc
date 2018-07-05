@@ -1,4 +1,4 @@
-package com.github.dcano.wesgardpoc;
+package com.roche.modules.re;
 
 import com.github.rpaulkennedy.jarules.rule.And;
 import com.github.rpaulkennedy.jarules.rule.Expr;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class RuleEvaluationVisitor implements WestgardVisitor {
+public class RuleEvaluationVisitor implements RuleVisitor {
 
     private final WestgardRuleContext context;
     private final Consumer<RuleEvaluationRespose.RuleEvalutionResult> callback;

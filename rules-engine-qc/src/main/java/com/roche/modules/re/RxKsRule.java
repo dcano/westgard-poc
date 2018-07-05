@@ -1,6 +1,6 @@
-package com.github.dcano.wesgardpoc;
+package com.roche.modules.re;
 
-class RxKsRule extends WestgardRule {
+class RxKsRule extends QcRule {
 
     private final int r;
     private final int k;
@@ -11,7 +11,7 @@ class RxKsRule extends WestgardRule {
     }
 
     @Override
-    void accept(WestgardVisitor visitor) {
+    void accept(RuleVisitor visitor) {
         visitor.visit(this);
     }
 

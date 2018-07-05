@@ -1,4 +1,4 @@
-package com.github.dcano.wesgardpoc;
+package com.roche.modules.re;
 
 import java.time.ZonedDateTime;
 import java.util.Objects;

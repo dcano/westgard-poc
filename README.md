@@ -1,1 +1,1 @@
-Simple PoC for implementing westgard rules using ja-rules library.
+Simple PoC for implementing westgard rulesToExecute using ja-rulesToExecute library.
