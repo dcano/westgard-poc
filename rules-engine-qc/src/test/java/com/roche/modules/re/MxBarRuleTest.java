@@ -20,7 +20,7 @@ import static com.roche.modules.re.ResultLocation.BELOW_MEAN;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(Parameterized.class)
-public class NxRuleTest {
+public class MxBarRuleTest {
 
     private static final double MEAN = 4;
     private static final double SD = 1;
@@ -30,7 +30,7 @@ public class NxRuleTest {
     private List<QcResult> resultsUnderEvaluation;
     private EvaluationResult expected;
 
-    public NxRuleTest(int numberOfResults, ResultLocation resultLocation, EvaluationResult expected) {
+    public MxBarRuleTest(int numberOfResults, ResultLocation resultLocation, EvaluationResult expected) {
         this.expected = expected;
         this.resultLocation = resultLocation;
         this.N = numberOfResults;
@@ -48,7 +48,7 @@ public class NxRuleTest {
     public void should_evaluate_qc_results_against_NxS_rule() {
         WestgardRuleContext westgardRuleContext = new WestgardRuleContext(tenantId, MEAN, SD, resultsUnderEvaluation.get(resultsUnderEvaluation.size()-1), resultsUnderEvaluation);
         RuleVisitor evaluationVisitor = new RuleEvaluationVisitor(westgardRuleContext, ruleEvaluationResult -> assertThat(ruleEvaluationResult.getEvaluationResult()).as("Rule matches").isEqualTo(expected));
-        QcRule rule = new NxRule(N);
+        QcRule rule = new MxBarRule(N);
         rule.accept(evaluationVisitor);
     }
 

@@ -1,10 +1,10 @@
 package com.roche.modules.re;
 
-class NxRule extends QcRule {
+class MxBarRule extends QcRule {
 
     private final int n;
 
-    NxRule(int n) {
+    MxBarRule(int n) {
         this.n = n;
     }
 

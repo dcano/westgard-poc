@@ -59,7 +59,7 @@ public class RuleEvaluationVisitor implements RuleVisitor {
     }
 
     @Override
-    public void visit(NxRule nxRule) {
+    public void visit(MxBarRule nxRule) {
         if(context.getContextControls().size() < nxRule.getN()) throw new IllegalStateException("No enough results available"); //TODO consider using custom runtime exception
 
         Rule rule;
@@ -68,7 +68,7 @@ public class RuleEvaluationVisitor implements RuleVisitor {
         List<Rule> belowRules = new ArrayList<>();
 
         int resultUnderEvaluationIndex = context.getContextControls().size() - 1;
-        for(int i = resultUnderEvaluationIndex; i > resultUnderEvaluationIndex - nxRule.getN(); i--) {
+        for(int i = resultUnderEvaluationIndex; i > resultUnderEvaluationIndex - nxRule.getN() + 1; i--) {
             aboveRules.add(nxAboveRuleFor(i));
             belowRules.add(nxBelowRuleFor(i));
         }
@@ -82,6 +82,38 @@ public class RuleEvaluationVisitor implements RuleVisitor {
             callback.accept(RuleEvaluationRespose.RuleEvalutionResult.nonMatchingResultFor(nxRule, context.getControlUnderEvaluation().getId()));
         }
 
+    }
+
+    @Override
+    public void visit(MmonoRule mmonoRule) {
+        if(context.getContextControls().size() < mmonoRule.getM()) throw new IllegalStateException("No enough results available"); //TODO consider using custom runtime exception
+        Rule rule;
+        List<Rule> ascendantTrendRules = new ArrayList<>();
+        List<Rule> descendantTrendRules = new ArrayList<>();
+
+        int resultUnderEvaluationIndex = context.getContextControls().size() - 1;
+        for(int i = resultUnderEvaluationIndex; i > resultUnderEvaluationIndex - mmonoRule.getM(); i--) {
+            ascendantTrendRules.add(mmonoAscendantRuleFor(i));
+            descendantTrendRules.add(mmonoDescendantRuleFor(i));
+        }
+
+        rule = And.of(ascendantTrendRules).or(And.of(descendantTrendRules));
+
+        if(rule.matches(context)) {
+            callback.accept(RuleEvaluationRespose.RuleEvalutionResult.matchingResultFor(mmonoRule, context.getControlUnderEvaluation().getId()));
+        }
+        else {
+            callback.accept(RuleEvaluationRespose.RuleEvalutionResult.nonMatchingResultFor(mmonoRule, context.getControlUnderEvaluation().getId()));
+        }
+
+    }
+
+    private Rule mmonoAscendantRuleFor(int resultIndex) {
+        return Expr.of("contextControls["+resultIndex+"].result > contextControls["+(resultIndex-1)+"].result");
+    }
+
+    private Rule mmonoDescendantRuleFor(int resultIndex) {
+        return Expr.of("contextControls["+resultIndex+"].result < contextControls["+(resultIndex-1)+"].result");
     }
 
     private Rule nxAboveRuleFor(int resultIndex) {
