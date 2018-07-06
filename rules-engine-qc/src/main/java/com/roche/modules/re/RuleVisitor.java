@@ -5,4 +5,5 @@ public interface RuleVisitor {
     void visit(R4sRule r4sRule);
     void visit(MxBarRule nxRule);
     void visit(MmonoRule mmonoRule);
+    void visit(RangeRule rangeRule);
 }

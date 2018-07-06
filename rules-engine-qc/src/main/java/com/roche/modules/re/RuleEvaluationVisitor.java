@@ -108,6 +108,17 @@ public class RuleEvaluationVisitor implements RuleVisitor {
 
     }
 
+    @Override
+    public void visit(RangeRule rangeRule) {
+        Rule rule = Expr.of("T(com.roche.modules.re.RuleEvaluationVisitor).isOutsideRange(contextControls[0].min, contextControls[0].max, contextControls[0].result)");
+        if(rule.matches(context)) {
+            callback.accept(RuleEvaluationRespose.RuleEvalutionResult.matchingResultFor(rangeRule, context.getControlUnderEvaluation().getId()));
+        }
+        else {
+            callback.accept(RuleEvaluationRespose.RuleEvalutionResult.nonMatchingResultFor(rangeRule, context.getControlUnderEvaluation().getId()));
+        }
+    }
+
     private Rule mmonoAscendantRuleFor(int resultIndex) {
         return Expr.of("contextControls["+resultIndex+"].result > contextControls["+(resultIndex-1)+"].result");
     }
@@ -130,6 +141,10 @@ public class RuleEvaluationVisitor implements RuleVisitor {
 
     private Rule rxKsBelowRuleFor(int k, int resultIndex) {
         return Expr.of("(contextControls["+resultIndex+"].result < " +context.getMean()+ ") && (contextControls["+resultIndex+"].result - " + context.getMean() + ") <= (" + k + "*" + context.getSd() + " * (-1) )");
+    }
+
+    public static boolean isOutsideRange(double min, double max, double result) {
+        return (result >= min) && (result <= max);
     }
 
 }
