@@ -8,6 +8,7 @@ import com.github.rpaulkennedy.jarules.rule.Rule;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class RuleEvaluationVisitor implements RuleVisitor {
 
@@ -119,6 +120,17 @@ public class RuleEvaluationVisitor implements RuleVisitor {
         }
     }
 
+    @Override
+    public void visit(AlphanumericRule alphanumericRule) {
+        Rule rule = Expr.of("T(com.roche.modules.re.RuleEvaluationVisitor).contains(T(java.util.Arrays).asList("+alphanumericRule.getAlphanumericList().stream().map(s -> "\"" + s + "\"").collect(Collectors.joining(","))+"), contextControls[0].alphanumericResultList)");
+        if(rule.matches(context)) {
+            callback.accept(RuleEvaluationRespose.RuleEvalutionResult.matchingResultFor(alphanumericRule, context.getControlUnderEvaluation().getId()));
+        }
+        else {
+            callback.accept(RuleEvaluationRespose.RuleEvalutionResult.nonMatchingResultFor(alphanumericRule, context.getControlUnderEvaluation().getId()));
+        }
+    }
+
     private Rule mmonoAscendantRuleFor(int resultIndex) {
         return Expr.of("contextControls["+resultIndex+"].result > contextControls["+(resultIndex-1)+"].result");
     }
@@ -147,4 +159,7 @@ public class RuleEvaluationVisitor implements RuleVisitor {
         return (result >= min) && (result <= max);
     }
 
+    public static boolean contains(List<String> reference, List<String> values) {
+        return values.stream().anyMatch(reference::contains);
+    }
 }

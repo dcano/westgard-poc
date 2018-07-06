@@ -1,6 +1,7 @@
 package com.roche.modules.re;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Objects;
 
 class QcResult {
@@ -10,17 +11,27 @@ class QcResult {
     private final double min;
     private final double max;
     private final ZonedDateTime zonedDateTime;
+    private List<String> alphanumericResultList;
 
     QcResult(String id, double result, ZonedDateTime zonedDateTime) {
         this(id, result, zonedDateTime, -1, -1);
     }
 
     QcResult(String id, double result, ZonedDateTime zonedDateTime, double min, double max) {
+        this(id, result, zonedDateTime, min, max, null);
+    }
+
+    QcResult(String id, double result, ZonedDateTime zonedDateTime, double min, double max, List<String> alphanumericResultList) {
         this.id = id;
         this.result = result;
         this.zonedDateTime = zonedDateTime;
         this.max = max;
         this.min = min;
+        this.alphanumericResultList = alphanumericResultList;
+    }
+
+    public List<String> getAlphanumericResultList() {
+        return alphanumericResultList;
     }
 
     String getId() {

@@ -6,4 +6,5 @@ public interface RuleVisitor {
     void visit(MxBarRule nxRule);
     void visit(MmonoRule mmonoRule);
     void visit(RangeRule rangeRule);
+    void visit(AlphanumericRule alphanumericRule);
 }
