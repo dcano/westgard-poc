@@ -7,4 +7,5 @@ public interface RuleVisitor {
     void visit(MmonoRule mmonoRule);
     void visit(RangeRule rangeRule);
     void visit(AlphanumericRule alphanumericRule);
+    void visit(TwoOfThree2s twoOfThree2s);
 }

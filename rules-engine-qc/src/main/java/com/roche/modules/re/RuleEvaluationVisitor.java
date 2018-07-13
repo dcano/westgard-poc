@@ -6,6 +6,7 @@ import com.github.rpaulkennedy.jarules.rule.Or;
 import com.github.rpaulkennedy.jarules.rule.Rule;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -130,6 +131,45 @@ public class RuleEvaluationVisitor implements RuleVisitor {
             callback.accept(RuleEvaluationRespose.RuleEvalutionResult.nonMatchingResultFor(alphanumericRule, context.getControlUnderEvaluation().getId()));
         }
     }
+
+    @Override
+    public void visit(TwoOfThree2s twoOfThree2s) {
+        if(context.getContextControls().size() < 3) throw new IllegalStateException("No enough results available"); //TODO consider using custom runtime exception
+
+        Rule rule;
+
+        List<Rule> aboveRules = new ArrayList<>();
+        List<Rule> belowRules = new ArrayList<>();
+
+        int resultUnderEvaluationIndex = context.getContextControls().size() - 1;
+        for(int i = resultUnderEvaluationIndex; i > resultUnderEvaluationIndex - 3; i--) {
+            aboveRules.add(twoOfThreeAboveRuleFor(i));
+            belowRules.add(twoOfThreeBelowRuleFor(i));
+        }
+
+        Rule twoOfThreeRule = Expr.of("T(com.roche.modules.re.RuleEvaluationVisitor).twoOfThree2s("+context.getMean()+",2,3,"+context.getSd()+",T(java.util.Arrays).asList(contextControls[0], contextControls[1], contextControls[2]))");
+        rule = (And.of(aboveRules).or(And.of(belowRules))).and(twoOfThreeRule);
+        if(rule.matches(context)) {
+            callback.accept(RuleEvaluationRespose.RuleEvalutionResult.matchingResultFor(twoOfThree2s, context.getControlUnderEvaluation().getId()));
+        }
+        else {
+            callback.accept(RuleEvaluationRespose.RuleEvalutionResult.nonMatchingResultFor(twoOfThree2s, context.getControlUnderEvaluation().getId()));
+        }
+    }
+
+    private Rule twoOfThreeBelowRuleFor(int resultIndex) {
+        return Expr.of("contextControls["+resultIndex+"].result <= " + context.getMean());
+    }
+
+    private Rule twoOfThreeAboveRuleFor(int resultIndex) {
+        return Expr.of("contextControls["+resultIndex+"].result >= " + context.getMean());
+    }
+
+
+    public static boolean twoOfThree2s(double mean, int n, int of, double sd, List<QcResult> results) {
+        return results.stream().limit(of).filter(result -> Math.abs(result.getResult() - mean) > (2 * sd)).count() >= n;
+    }
+
 
     private Rule mmonoAscendantRuleFor(int resultIndex) {
         return Expr.of("contextControls["+resultIndex+"].result > contextControls["+(resultIndex-1)+"].result");
